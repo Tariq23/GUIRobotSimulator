@@ -8,7 +8,7 @@ public enum Direction {
 
     /**
      * Method to get a random direction.
-     * @return A random direction.
+     * @return - A random direction.
      */
     public static Direction getRandomDirection() {
         return values()[(int) (Math.random() * values().length)];
@@ -16,7 +16,7 @@ public enum Direction {
 
     /**
      * Method to get the next direction in NESW order.
-     * @return The next direction.
+     * @return - The next direction.
      */
     public Direction next() {
         return values()[(this.ordinal() + 1) % values().length];
@@ -24,7 +24,7 @@ public enum Direction {
 
     /**
      * Method to get the opposite direction.
-     * @return The opposite direction.
+     * @return - The opposite direction.
      */
     public Direction opposite() {
         switch (this) {

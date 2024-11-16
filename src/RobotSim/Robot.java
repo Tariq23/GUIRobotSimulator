@@ -8,68 +8,133 @@ import java.io.Serializable;
  */
 public class Robot implements Serializable {
     private static final long serialVersionUID = 1L;
-    private int x, y; // Robot's position
-    private static int idCounter = 0; // Counter for unique IDs
-    private int id; // Robot's unique ID
-    private Direction direction; // Direction the robot will move
+    private int x;
+    private int y;
+    private static int idCounter = 0;
+    private int id;
+    private Direction direction;
 
     /**
      * Constructor to create a robot at a specific position with a direction.
-     * @param x X-coordinate of the robot.
-     * @param y Y-coordinate of the robot.
-     * @param direction Initial direction of the robot.
+     * @param x - The x-coordinate of the robot.
+     * @param y - The y-coordinate of the robot.
+     * @param - direction The initial direction of the robot.
      */
     public Robot(int x, int y, Direction direction) {
         this.x = x;
         this.y = y;
         this.direction = direction;
-        this.id = idCounter++; // Assign unique ID and increment counter
+        this.id = idCounter++;
     }
 
     /**
-     * Method to return robot's details as a string.
-     * @return String representation of the robot.
+     * Gets the x-coordinate of the robot.
+     * @return The x-coordinate of the robot.
      */
-    public String toString() {
-        return "Robot " + id + " is at " + x + ", " + y + " facing " + direction;
+    public int getX() {
+        return x;
     }
 
     /**
-     * Method to display the robot on the canvas.
-     * @param c The canvas used to display the robot.
+     * Sets the x-coordinate of the robot.
+     * @param x - The new x-coordinate of the robot.
+     */
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    /**
+     * Gets the y-coordinate of the robot.
+     * @return - The y-coordinate of the robot.
+     */
+    public int getY() {
+        return y;
+    }
+
+    /**
+     * Sets the y-coordinate of the robot.
+     * @param y - The new y-coordinate of the robot.
+     */
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    /**
+     * Gets the ID of the robot.
+     * @return - The unique ID of the robot.
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Gets the direction of the robot.
+     * @return - The current direction of the robot.
+     */
+    public Direction getDirection() {
+        return direction;
+    }
+
+    /**
+     * Sets the direction of the robot.
+     * @param - direction The new direction of the robot.
+     */
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    /**
+     * Returns a string representation of the robot.
+     * @return - A string describing the robot's ID, position, and direction.
+     */
+    @Override
+    public String toString() {
+        return "Robot " + id + " is at (" + x + ", " + y + ") facing " + direction;
+    }
+
+    /**
+     * Displays the robot on the canvas.
+     * @param c - The canvas used to display the robot.
      */
     public void displayRobot(ConsoleCanvas c) {
-        c.showIt(x, y, 'R'); // Place 'R' at the robot's position
+        char symbol = switch (direction) {
+            case NORTH -> '^';
+            case EAST -> '>';
+            case SOUTH -> 'v';
+            case WEST -> '<';
+        };
+        c.showIt(x, y, symbol);
     }
 
     /**
-     * Method to check if the robot is at a specific position.
-     * @param sx X-coordinate to check.
-     * @param sy Y-coordinate to check.
-     * @return True if the robot is at (sx, sy), false otherwise.
+     * Checks if the robot is at a specific position.
+     * @param sx - The x-coordinate to check.
+     * @param sy - The y-coordinate to check.
+     * @return - True if the robot is at (sx, sy), false otherwise.
      */
     public boolean isHere(int sx, int sy) {
-        return this.x == sx && this.y == sy; // Return true if robot is at (sx, sy)
+        return this.x == sx && this.y == sy;
     }
 
     /**
-     * Method to try to move the robot in its current direction.
-     * @param arena The arena in which the robot is moving.
+     * Attempts to move the robot in its current direction.
+     * If the move is not possible, the robot changes direction.
+     * @param arena - The arena in which the robot is moving.
      */
     public void tryToMove(RobotArena arena) {
         int newX = x, newY = y;
         switch (direction) {
-            case NORTH: newY--; if (newY < 0) { newY = arena.getHeight() - 1; } break;
-            case EAST: newX++; if (newX >= arena.getWidth()) { newX = 0; } break;
-            case SOUTH: newY++; if (newY >= arena.getHeight()) { newY = 0; } break;
-            case WEST: newX--; if (newX < 0) { newX = arena.getWidth() - 1; } break;
+            case NORTH: newY--; break;
+            case EAST: newX++; break;
+            case SOUTH: newY++; break;
+            case WEST: newX--; break;
         }
 
         if (arena.canMoveHere(newX, newY)) {
-            x = newX;
-            y = newY;
+            setX(newX);
+            setY(newY);
         } else {
-            direction = direction.next(); // Change direction if move is not possible
+            setDirection(direction.next());
         }
     }
 }
